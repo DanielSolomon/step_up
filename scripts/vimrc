@@ -1,0 +1,37 @@
+" Show position.
+set ruler
+
+" Show line numbers.
+set number
+
+" If file is changed from outside, it will refresh it.
+set autoread
+
+" Make backspace work like it should.
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" Case insensitive when searching, and make a smart search.
+set ignorecase
+set smartcase
+
+" Highlight search.
+set hlsearch
+
+" Increamental search.
+set incsearch
+
+" Remove fucked backup.
+set nobackup
+set noswapfile
+
+" Tabs are shit.
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4
+set autoindent
+set smartindent
+
+" Ctrl-l clear screen from search.
+nmap <C-l> :noh<CR>
