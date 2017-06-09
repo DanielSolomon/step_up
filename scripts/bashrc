@@ -1,0 +1,87 @@
+
+# check window size after each command, if size changes update LINES and COLUMNS.
+shopt -s checkwinsize
+
+# modify prompt differently between user and root.
+if [[ `id -u` == 0 ]]
+then
+    PS1='\[\033[01;31m\]\u\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]# '
+else
+    PS1='\[\033[01;33m\]\u\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+fi
+
+# making dates in english.
+export LC_TIME=en_US.UTF-8
+
+# fast install.
+alias install="echo qwerty | sudo -S apt-get --install-suggests -y --show-progress install"
+
+# ls aliases.
+alias ls="ls -la --group-directories-first --color"
+# make ls work again.
+alias sl=ls
+alias sk=ls
+alias ks=ls
+alias LS=ls
+alias SL=ls
+alias KS=ls
+alias SK=ls
+
+# virtualenv stuff.
+alias virtualenv="virtualenv --prompt='\[\033[01;32m\](\$(basename \$(dirname \$VIRTUAL_ENV)))\[\033[00m\] ' --python=python3 .venv"
+
+activate()
+{
+    old_pwd="$OLDPWD"
+    cwd="$(pwd)"
+    while [[ "$(pwd)" != "/" ]]
+    do
+        if [[ -d .venv ]]
+        then
+            source .venv/bin/activate
+        fi
+        cd ..
+    done
+    cd "$old_pwd"
+    cd "$cwd"
+}
+
+venv()
+{
+    virtualenv
+    echo "../../../../" > ".venv/lib/python3.5/site-packages/self.pth"
+}
+
+download_venv()
+{
+    if [[ -z "$1" ]]
+    then
+        dir=.
+    else
+        dir="$1"
+        if [[ ! -d "$1" ]]
+        then
+            mkdir -p "$1"
+        fi
+    fi
+    pip download --no-binary :all: --dest="$dir" $(pip freeze)
+}
+
+alias requirements="pip freeze | grep -v 'pkg-resources' > requirements.txt"
+
+# make vim default editor.
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+# git stuff.
+
+# fast push to origin master
+alias gpom="git push origin master"
+
+# git auto completion.
+source $HOME/git.autocompletion
+
+
+# whenever new shell is opened, trying to activate venv.
+activate
+
