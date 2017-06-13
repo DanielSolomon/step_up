@@ -1,0 +1,3 @@
+vim
+openssh-server
+compizconfig-settings-manager
