@@ -1,0 +1,30 @@
+# Complied
+*.exe
+*.o
+*.so
+*.bin
+*.pyc
+
+# Cache
+.cache/
+cache/
+__pycache__/
+
+# Packages
+*.7z
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs
+*.log
+
+# Databases
+*.db
+
+# Virtual env
+.venv/*
+
