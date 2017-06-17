@@ -66,9 +66,9 @@ fast_purge()
     apt-get --install-suggests -y --show-progress purge $@
 }
 
-# cannot runit is shit for git in ubuntu 16.04, we must use the sysvinit instead
 install_git()
 {
+    # cannot runit is shit for git in ubuntu 16.04, we must use the sysvinit instead
     fast_purge runit
     fast_purge git-all
     fast_purge git
@@ -103,6 +103,18 @@ install_fix_display()
     chown "$USER:crontab" "/var/spool/cron/crontabs/$USER"
 }
 
+install_rc()
+{
+    bashrc="$SCRIPTS_DIR/bashrc"
+    vimrc="$SCRIPTS_DIR/vimrc"
+    pythonrc="$SCRIPTS_DIR/pythonrc"
+
+    ln -s "$bashrc" "$HOME_DIR/.bashrc"
+    ln -s "$vimrc" "$HOME_DIR/.vimrc"
+    ln -s "$pythonrc" "$HOME_DIR/.pythonrc"
+}
+
+confirm "install rc files?" "y" install_rc
 confirm "install git?" "n" install_git
 confirm "config git?" "n" config_git
 confirm "install fix display?" "y" install_fix_display
