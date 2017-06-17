@@ -37,17 +37,15 @@ confirm()
         default=
     fi
 
-    echo "$1 $default"
+    echo -n "$1 $default: "
     read response
 
     if [[ ! -z "$response" ]]
     then
         if [ "$response" = "y" -o "$response" = "Y" ]
         then
-            echo "bad"
             do_it=1
         else
-            echo "good"
             do_it=0
         fi
     fi
@@ -105,5 +103,6 @@ install_fix_display()
     chown "$USER:crontab" "/var/spool/cron/crontabs/$USER"
 }
 
-set -x
+confirm "install git?" "n" install_git
+confirm "config git?" "n" config_git
 confirm "install fix display?" "y" install_fix_display
