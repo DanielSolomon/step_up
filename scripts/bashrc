@@ -75,8 +75,9 @@ export EDITOR="$VISUAL"
 
 # git stuff.
 
-# fast push to origin master
+# fast push/pull to origin master
 alias gpom="git push origin master"
+alias gpol="git pull origin master"
 
 # git auto completion.
 source $HOME/git.autocompletion
