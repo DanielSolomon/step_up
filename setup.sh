@@ -84,7 +84,8 @@ config_git()
     git config --global "alias.br" branch
     git config --global "alias.co" checkout
 
-    ln -s "$CONFIGS_DIR/global_gitignore" "$HOME_DIR/.global_gitignore"
+    ln -sf "$CONFIGS_DIR/git-completion.bash" "$HOME_DIR/git.autocompletion"
+    ln -sf "$CONFIGS_DIR/global_gitignore" "$HOME_DIR/.global_gitignore"
     git config --global core.excludesfile "$HOME_DIR/.global_gitignore"
 
     echo "enter global git user: "
@@ -109,12 +110,28 @@ install_rc()
     vimrc="$SCRIPTS_DIR/vimrc"
     pythonrc="$SCRIPTS_DIR/pythonrc"
 
-    ln -s "$bashrc" "$HOME_DIR/.bashrc"
-    ln -s "$vimrc" "$HOME_DIR/.vimrc"
-    ln -s "$pythonrc" "$HOME_DIR/.pythonrc"
+    ln -sf "$bashrc" "$HOME_DIR/.bashrc"
+    ln -sf "$vimrc" "$HOME_DIR/.vimrc"
+    ln -sf "$pythonrc" "$HOME_DIR/.pythonrc"
 }
 
-confirm "install rc files?" "y" install_rc
+install_packages()
+{
+    for repo in $(cat "$CONFIGS_DIR/repositories.txt")
+    do
+        echo "adding $repo"
+        add-apt-repository "$repo"
+    done
+    apt-get update
+    for package in $(cat "$CONFIGS_DIR/install_packages.txt")
+    do
+        echo "installing $package"
+        fast_install "$package"
+    done
+}
+
+confirm "install rc files?" "n" install_rc
 confirm "install git?" "n" install_git
 confirm "config git?" "n" config_git
-confirm "install fix display?" "y" install_fix_display
+confirm "install fix display?" "n" install_fix_display
+confirm "install packages?" "y" install_packages
