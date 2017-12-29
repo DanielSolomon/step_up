@@ -94,7 +94,7 @@ config_git()
     read mail
 
     git config --global user.name "$user"
-    git config --global user.mail "$mail"
+    git config --global user.email "$mail"
 }
 
 install_fix_display()
