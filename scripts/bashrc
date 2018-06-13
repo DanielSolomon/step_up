@@ -75,6 +75,9 @@ export EDITOR="$VISUAL"
 
 # git stuff.
 
+# pretty graphs
+alias gitl="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+
 # fast push/pull to origin master
 alias gpom="git push origin master"
 alias gpol="git pull origin master"
