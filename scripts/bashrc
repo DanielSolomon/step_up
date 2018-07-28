@@ -29,7 +29,7 @@ alias KS=ls
 alias SK=ls
 
 # virtualenv stuff.
-alias virtualenv="virtualenv --prompt='\[\033[01;32m\](\$(basename \$(dirname \$VIRTUAL_ENV)))\[\033[00m\] ' --python=python3 .venv"
+alias virtualenv="virtualenv --prompt='\[\033[01;32m\](\$(basename \$(dirname \$VIRTUAL_ENV)))\[\033[00m\] ' .venv"
 
 activate()
 {
@@ -80,11 +80,33 @@ download_venv()
     pip download --no-binary :all: --dest="$dir" $(pip freeze)
 }
 
+go()
+{
+    tmpfile=$(mktemp)
+    echo "cd $1" > "$tmpfile"
+    cat "$HOME/.bashrc" >> "$tmpfile"
+    echo >> "$tmpfile"
+    echo "rm $tmpfile" >> "$tmpfile"
+    bash --rcfile "$tmpfile"
+}
+
+
+cd_and_ls()
+{
+    cd "$1"
+    ls
+}
+
+alias cd=cd_and_ls
+
 alias requirements="pip freeze | grep -v 'pkg-resources' > requirements.txt"
 
 # make vim default editor.
 export VISUAL=vim
 export EDITOR="$VISUAL"
+
+# make some colors
+export PAGER=/usr/bin/vimpager
 
 # git stuff.
 
@@ -98,7 +120,14 @@ alias gpol="git pull origin master"
 # git auto completion.
 source $HOME/git.autocompletion
 
-
 # whenever new shell is opened, trying to activate venv.
 activate
 
+# God knows how I have managed to live until I've found it.
+tmux
+
+# Now we finished, we may run the local bashrc
+if [ -f $HOME/.bashrc.local ]
+then
+    source $HOME/.bashrc.local 
+fi
