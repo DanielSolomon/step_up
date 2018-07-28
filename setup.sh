@@ -22,13 +22,28 @@ cd "$cwd"
 CONFIGS_DIR="$PROJ_DIR/configs"
 SCRIPTS_DIR="$PROJ_DIR/scripts"
 
+save_dir()
+{
+    local old_pwd="$(pwd)"
+    func="$1"
+    shift
+    eval "$func" $@
+    cd "$old_pwd"
+}
+
 confirm()
 {
-    if [[ "$2" == y ]]
+    message="$1"
+    shift
+    default="$1"
+    shift
+    func="$1"
+    shift
+    if [[ "$default" == y ]]
     then
         do_it=1
         default="[Yn]"
-    elif [[ "$2" == n ]]
+    elif [[ "$default" == n ]]
     then
         do_it=0
         default="[yN]"
@@ -37,7 +52,7 @@ confirm()
         default=
     fi
 
-    echo -n "$1 $default: "
+    echo -n "$message $default: "
     read response
 
     if [[ ! -z "$response" ]]
@@ -52,7 +67,7 @@ confirm()
 
     if [[ "$do_it" == 1 ]]
     then
-        eval "$3"
+        eval "$func" $@
     fi
 }
 
@@ -130,21 +145,39 @@ install_packages()
     done
 }
 
+clone_project()
+{
+    git clone "$1"
+    chown -R "$USER:$USER" $(echo $(basename "$1") | cut -f1 -d'.')
+    if [ ! -z "$2" ]
+    then
+        save_dir "$2"
+    fi
+}
+
 clone_projects()
 {
-    old_pwd="$(pwd)"
     cd "$HOME/projects"
-    for repo in $(cat "$CONFIGS_DIR/git_repositories.txt")
+    declare -a repos
+    readarray -t repos < "$CONFIGS_DIR/git_repositories.txt"
+    for repo in "${repos[@]}"
     do
-        post_script=$(echo "$repo" | cut -f2 -d" ")
+        post_script=$(echo "$repo" | cut -s -f2 -d" ")
         repo=$(echo "$repo" | cut -f1 -d" ")
-        git clone repo
-        if [ -z "$post_script" ]
-        then
-            $("$post_script")
-        fi
+        confirm "> clone $repo?" "n" clone_project "$repo" "$post_script"
     done
-    cd "$old_pwd"
+}
+
+tmux_config()
+{
+    cd 
+    ln -sf projects/.tmux/.tmux.conf
+    cp projects/.tmux/.tmux.conf.local .
+}
+
+commacd_config()
+{
+    curl -sL https://github.com/shyiko/commacd/raw/v0.4.0/commacd.bash -o commacd/.commacd.bash
 }
 
 confirm "install rc files?" "n" install_rc
@@ -152,4 +185,5 @@ confirm "install git?" "n" install_git
 confirm "config git?" "n" config_git
 confirm "install fix display?" "n" install_fix_display
 confirm "install packages?" "n" install_packages
-confirm "clone projects?" "n" clone_projects
+confirm "clone projects?" "n" save_dir clone_projects
+
