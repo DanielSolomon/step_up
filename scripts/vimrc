@@ -1,3 +1,6 @@
+" Enable syntax highlighting
+syntax on
+
 " Show position.
 set ruler
 
@@ -35,3 +38,6 @@ set smartindent
 
 " Ctrl-l clear screen from search.
 nmap <C-l> :noh<CR>
+
+" Fix stupid bracketed paste
+set t_BE=
