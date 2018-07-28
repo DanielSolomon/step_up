@@ -10,6 +10,9 @@ else
     PS1='\[\033[01;33m\]\u\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 fi
 
+# projects dir
+export PROJECT_DIR="$HOME/projects"
+
 # making dates in english.
 export LC_TIME=en_US.UTF-8
 
@@ -125,6 +128,12 @@ activate
 
 # God knows how I have managed to live until I've found it.
 tmux
+
+# commacd
+if [ -d "$PROJECT_DIR/commacd" ]
+then
+    source "$PROJECT_DIR/commacd/commacd.bash"
+fi
 
 # Now we finished, we may run the local bashrc
 if [ -f $HOME/.bashrc.local ]
