@@ -130,8 +130,26 @@ install_packages()
     done
 }
 
+clone_projects()
+{
+    old_pwd="$(pwd)"
+    cd "$HOME/projects"
+    for repo in $(cat "$CONFIGS_DIR/git_repositories.txt")
+    do
+        post_script=$(echo "$repo" | cut -f2 -d" ")
+        repo=$(echo "$repo" | cut -f1 -d" ")
+        git clone repo
+        if [ -z "$post_script" ]
+        then
+            $("$post_script")
+        fi
+    done
+    cd "$old_pwd"
+}
+
 confirm "install rc files?" "n" install_rc
 confirm "install git?" "n" install_git
 confirm "config git?" "n" config_git
 confirm "install fix display?" "n" install_fix_display
-confirm "install packages?" "y" install_packages
+confirm "install packages?" "n" install_packages
+confirm "clone projects?" "n" clone_projects

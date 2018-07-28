@@ -14,3 +14,4 @@ aptitude
 cmake
 curl
 virtualenv
+tmux
