@@ -18,6 +18,7 @@ alias install="echo qwerty | sudo -S apt-get --install-suggests -y --show-progre
 
 # ls aliases.
 alias ls="ls -la --group-directories-first --color"
+alias ll="ls"
 # make ls work again.
 alias sl=ls
 alias sk=ls
@@ -48,8 +49,20 @@ activate()
 
 venv()
 {
-    virtualenv
-    echo "../../../../" > ".venv/lib/python3.5/site-packages/self.pth"
+    virtualenv "$1"
+    lib=$(\ls .venv/lib/)
+    echo "../../../../" > ".venv/lib/$lib/site-packages/self.pth"
+    activate
+}
+
+venv2()
+{
+    venv --python=python2
+}
+
+venv3()
+{
+    venv --python=python3
 }
 
 download_venv()
@@ -75,6 +88,7 @@ export EDITOR="$VISUAL"
 
 # git stuff.
 
+alias gitl="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
 # fast push/pull to origin master
 alias gpom="git push origin master"
 alias gpol="git pull origin master"
